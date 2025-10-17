@@ -1,6 +1,14 @@
 
 
-#USER INTERFACE
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+from xgboost import XGBClassifier
+import csv
+from datetime import datetime
+
+
 def chatbot():
 
     print("👋 Welcome to CarePredictAI!")
