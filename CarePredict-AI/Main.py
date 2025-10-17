@@ -8,6 +8,46 @@ from xgboost import XGBClassifier
 import csv
 from datetime import datetime
 
+# ============================================================================
+# LOAD AND PREPARE DATASET
+# ============================================================================
+df = pd.read_csv('Full_Patient_Risk_Prediction_Dataset.csv')
+
+# Keep relevant columns
+df = df[['Age', 'Gender', 'Symptoms', 'Medical_History', 'Lifestyle', 'Risk_Level']]
+df = df.dropna()
+
+# Encode categorical features
+le_gender = LabelEncoder()
+le_history = LabelEncoder()
+le_lifestyle = LabelEncoder()
+le_risk = LabelEncoder()
+
+df['Gender'] = le_gender.fit_transform(df['Gender'])
+df['Medical_History'] = le_history.fit_transform(df['Medical_History'])
+df['Lifestyle'] = le_lifestyle.fit_transform(df['Lifestyle'])
+df['Risk_Level'] = le_risk.fit_transform(df['Risk_Level'])
+
+# TF-IDF for Symptoms
+vectorizer = TfidfVectorizer()
+X_symptoms = vectorizer.fit_transform(df['Symptoms'])
+
+# Combine all features into one DataFrame
+X_symptoms_df = pd.DataFrame(X_symptoms.toarray(), columns=vectorizer.get_feature_names_out())
+X_symptoms_df['Age'] = df['Age'].values
+X_symptoms_df['Gender'] = df['Gender'].values
+X_symptoms_df['Medical_History'] = df['Medical_History'].values
+X_symptoms_df['Lifestyle'] = df['Lifestyle'].values
+X = X_symptoms_df
+X.columns = X.columns.astype(str)
+# Target
+y_risk = df['Risk_Level']
+
+
+
+
+
+
 
 def chatbot():
 
