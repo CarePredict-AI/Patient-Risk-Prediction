@@ -1,18 +1,14 @@
-def intro():
-    print("HELLO! \nWELCOME TO CarePredict-AI\n")
 
-    while True:
-       response = input("DO YOU WANT TO GO TO ADMIN OR PATIENT SECTION\n").upper()
 
-       if response == "ADMIN":
-           print("SECTION IS OFFLINE")
-           break
+#USER INTERFACE
+def chatbot():
 
-       elif response == "PATIENT":
-           print("SECTION IS OFFLINE")
-           break
+    print("👋 Welcome to CarePredictAI!")
+    name = input("Please enter your name: ")
+    print(f"I'm sorry you're feeling unwell, {name}. Let's check what might be going on.")
 
-       else:
-           print("CHOOSE BETWEEN ADMIN OR PATIENT\n")
-
-intro()
+    age = int(input("Enter your age: "))
+    gender = input("Enter your gender (Male/Female): ")
+    history = input("Briefly describe your medical history: ")
+    lifestyle = input("Describe your lifestyle (e.g., active, sedentary): ")
+    symptoms_text = input("Describe your symptoms: ")
