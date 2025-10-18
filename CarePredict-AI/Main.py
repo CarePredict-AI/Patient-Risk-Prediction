@@ -66,3 +66,36 @@ def chatbot():
     history = input("Briefly describe your medical history: ")
     lifestyle = input("Describe your lifestyle (e.g., active, sedentary): ")
     symptoms_text = input("Describe your symptoms: ")
+
+    # Safe encoding
+    gender_encoded = le_gender.transform([gender])[0] if gender in le_gender.classes_ else \
+    le_gender.transform([le_gender.classes_[0]])[0]
+    history_encoded = le_history.transform([history])[0] if history in le_history.classes_ else \
+    le_history.transform([le_history.classes_[0]])[0]
+    lifestyle_encoded = le_lifestyle.transform([lifestyle])[0] if lifestyle in le_lifestyle.classes_ else \
+    le_lifestyle.transform([le_lifestyle.classes_[0]])[0]
+
+    symptoms_vector = vectorizer.transform([symptoms_text]).toarray()[0]
+    input_data = list(symptoms_vector) + [age, gender_encoded, history_encoded, lifestyle_encoded]
+
+    # Predict risk level
+    risk_encoded = model_risk.predict([input_data])[0]
+    risk_level = le_risk.inverse_transform([risk_encoded])[0]
+
+    print(f"\n{name}, based on your symptoms, your Risk Level is: {risk_level}")
+    print("Please consult a healthcare professional for confirmation.")
+    print("__________________________________________________________")
+
+    # Log prediction
+    log_prediction(name, age, gender, history, lifestyle, symptoms_text, risk_level)
+
+
+
+def log_prediction(name, age, gender, history, lifestyle, symptoms, risk_level):
+        with open('prediction_log.csv', mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([datetime.now(), name, age, gender, history, lifestyle, symptoms, risk_level])
+
+
+while True:
+    chatbot()
